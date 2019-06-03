@@ -2,6 +2,7 @@ package remy.pouzet.topquiz.com.controller;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -12,11 +13,18 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
+
+
 import java.util.Arrays;
 
 import remy.pouzet.topquiz.com.R;
 import remy.pouzet.topquiz.com.model.Question;
 import remy.pouzet.topquiz.com.model.QuestionBank;
+
+import static remy.pouzet.topquiz.com.controller.MainActivity.PREF_KEY_FIRSTNAME;
+import static remy.pouzet.topquiz.com.controller.MainActivity.PREF_KEY_SCORE;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -28,6 +36,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     private QuestionBank mQuestionBank;
     private Question mCurrentQuestion;
+
+    private SharedPreferences mPreferences;
 
     private int mScore;
     private int mNumberOfQuestions;
@@ -52,17 +62,17 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             mNumberOfQuestions = savedInstanceState.getInt(BUNDLE_STATE_QUESTION);
         } else {
             mScore = 0;
-            mNumberOfQuestions = 4;
+            mNumberOfQuestions = 5;
         }
 
         mEnableTouchEvents = true;
 
         // Wire widgets
-        mQuestionTextView = (TextView) findViewById(R.id.activity_game_question_text);
-        mAnswerButton1 = (Button) findViewById(R.id.activity_game_answer1_btn);
-        mAnswerButton2 = (Button) findViewById(R.id.activity_game_answer2_btn);
-        mAnswerButton3 = (Button) findViewById(R.id.activity_game_answer3_btn);
-        mAnswerButton4 = (Button) findViewById(R.id.activity_game_answer4_btn);
+        mQuestionTextView = findViewById(R.id.activity_game_question_text);
+        mAnswerButton1 =  findViewById(R.id.activity_game_answer1_btn);
+        mAnswerButton2 =  findViewById(R.id.activity_game_answer2_btn);
+        mAnswerButton3 =  findViewById(R.id.activity_game_answer3_btn);
+        mAnswerButton4 = findViewById(R.id.activity_game_answer4_btn);
 
         // Use the tag property to 'name' the buttons
         mAnswerButton1.setTag(0);
@@ -77,6 +87,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
         mCurrentQuestion = mQuestionBank.getQuestion();
         this.displayQuestion(mCurrentQuestion);
+
+        Gson gson = new Gson();
+
+        Players players = new Players(mPreferences.getString(PREF_KEY_FIRSTNAME, null),mPreferences.getInt(PREF_KEY_SCORE, 0));
+        String json = gson.toJson(players);
     }
 
     @Override
@@ -125,25 +140,42 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         return mEnableTouchEvents && super.dispatchTouchEvent(ev);
     }
 
-    private void endGame() {
+    private void endGame()
+    {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle("Well done!")
                 .setMessage("Your score is " + mScore)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // End the activity
-                        Intent intent = new Intent();
-                        intent.putExtra(BUNDLE_EXTRA_SCORE, mScore);
-                        setResult(RESULT_OK, intent);
-                        finish();
-                    }
-                })
+                .setPositiveButton("OK", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                // End the activity
+                                Intent intent = new Intent();
+                                intent.putExtra(BUNDLE_EXTRA_SCORE, mScore);
+                                setResult(RESULT_OK, intent);
+                                finish();
+                            }
+                        }
+                )
                 .setCancelable(false)
                 .create()
                 .show();
     }
+
+    public class Players {
+        @SerializedName("firstname")
+        private String mFirstName;
+        @SerializedName("score")
+        private int mScore;
+
+        public Players (String firstName, int score) {
+            mFirstName = mPreferences.getString(PREF_KEY_FIRSTNAME, null);
+            mScore = mPreferences.getInt(PREF_KEY_SCORE, 0);
+        }
+    }
+
 
     private void displayQuestion(final Question question) {
         mQuestionTextView.setText(question.getQuestion());
