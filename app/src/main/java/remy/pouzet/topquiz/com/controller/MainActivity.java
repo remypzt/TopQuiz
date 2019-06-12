@@ -29,6 +29,10 @@ public class MainActivity extends AppCompatActivity {
     public static final String PREF_KEY_SCORE = "PREF_KEY_SCORE";
     public static final String PREF_KEY_FIRSTNAME = "PREF_KEY_FIRSTNAME";
 
+    private String mFirstname;
+
+    public static final String FIRSTNAME_REQUEST_CODE = "remy/pouzet/topquiz/com/controller/GameActivity.java" ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         mPlayButton.setEnabled(false);
         mRankingButton.setEnabled(false);
 
+
         greetUser();
 
         mNameInput.addTextChangedListener(new TextWatcher() {
@@ -68,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // User clicked the button
                 Intent gameActivityIntent = new Intent(MainActivity.this, GameActivity.class);
+                gameActivityIntent.putExtra(FIRSTNAME_REQUEST_CODE, firstname);
                 startActivityForResult(gameActivityIntent, GAME_ACTIVITY_REQUEST_CODE);
             }
         });
