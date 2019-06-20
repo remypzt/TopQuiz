@@ -41,7 +41,6 @@
         android:layout_marginRight="20dp"
         android:background="#40009688"
         android:padding="20dp"
-        android:text="Ranking"
-        android:onClick="launchRankingActivity"/>
+        android:text="Ranking"/>
 
 </LinearLayout>

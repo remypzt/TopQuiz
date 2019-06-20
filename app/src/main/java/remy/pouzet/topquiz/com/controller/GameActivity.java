@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,6 +49,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public static final String BUNDLE_STATE_QUESTION = "currentQuestion";
 
     public static final String PREF_PLAYERS_LIST = "PREF_PLAYERS_LIST";
+    public static final String PREF_PLAYERS_LIST1 = "PREF_PLAYERS_LIST1";
 
     private boolean mEnableTouchEvents;
 
@@ -64,7 +66,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
         System.out.println("GameActivity::onCreate()");
 
-        mPreferences = getPreferences(MODE_PRIVATE);
+        mPreferences = getSharedPreferences(PREF_PLAYERS_LIST, MODE_PRIVATE);
 
         mQuestionBank = this.generateQuestions();
 
@@ -154,14 +156,32 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     {
         Players players = new Players(mFirstname, mScore);
 
-        ArrayList playersList = new ArrayList();
+        ArrayList<Players> playersList = new ArrayList();
         playersList.add(players);
 
         Gson gson = new Gson();
         String jsonPlayersList = gson.toJson(playersList);
 
-        mPreferences.edit().putString(PREF_PLAYERS_LIST, jsonPlayersList).apply();
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putString(PREF_PLAYERS_LIST, jsonPlayersList).apply();
 
+        /* // makes a test by registering a Playerslist in another ArrayList //
+
+
+        String jsonPlayersList1 = mPreferences.getString(PREF_PLAYERS_LIST, null);
+
+        Gson gson1 = new Gson();
+        ArrayList<Players> playersList1 = gson1.fromJson(jsonPlayersList1, new TypeToken<ArrayList<Players>>() {}.getType());
+
+        ArrayList<Players> playersList11 = new ArrayList();
+        playersList11.add(playersList1.get(0));
+
+        Gson gson2 = new Gson();
+        String jsonPlayersList11 = gson2.toJson(playersList11);
+
+        SharedPreferences.Editor editor1 = mPreferences.edit();
+        editor1.putString(PREF_PLAYERS_LIST1, jsonPlayersList11).apply();
+*/
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
