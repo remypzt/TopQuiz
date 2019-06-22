@@ -19,6 +19,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 
 
 import remy.pouzet.topquiz.com.R;
@@ -158,6 +159,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }, 2000); // LENGTH_SHORT is usually 2 second long
     }
 
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev)
     {
@@ -168,33 +170,39 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     {
         Players players = new Players(mFirstname, mScore);
 
+        mPreferences = getSharedPreferences(PREF_PLAYERS_LIST, MODE_PRIVATE);
         String fromJsonPlayersList = mPreferences.getString(PREF_PLAYERS_LIST, null);
+
+        Gson gson = new Gson();
+        ArrayList<Players> playersList2 = gson.fromJson(fromJsonPlayersList, new TypeToken<ArrayList<Players>>()
+        {
+        }.getType());
+
+
 
         if (null == fromJsonPlayersList)
         {
             ArrayList<Players> playersList = new ArrayList();
             playersList.add(players);
 
-            Gson gson = new Gson();
-            String jsonPlayersList = gson.toJson(playersList);
+            Gson gson1 = new Gson();
+            String jsonPlayersList = gson1.toJson(playersList);
 
             SharedPreferences.Editor editor = mPreferences.edit();
             editor.putString(PREF_PLAYERS_LIST, jsonPlayersList).apply();
-        } else
+
+        } else if (playersList2.size() <= 5)
         {
-            Gson gson2 = new Gson();
-            ArrayList<Players> playersList2 = gson2.fromJson(fromJsonPlayersList, new TypeToken<ArrayList<Players>>()
-            {
-            }.getType());
             playersList2.add(players);
 
-            Gson gson3 = new Gson();
-            String PlayersList2 = gson3.toJson(playersList2);
+            Gson gson1 = new Gson();
+            String PlayersList = gson1.toJson(playersList2);
 
-            SharedPreferences.Editor editor = mPreferences2.edit();
-            editor.putString(PREF_PLAYERS_LIST2, PlayersList2).apply();
-        }
-
+            SharedPreferences.Editor editor = mPreferences.edit();
+            editor.putString(PREF_PLAYERS_LIST, PlayersList).apply();
+        }/* else  if  //mscore is bigger than weakest players
+        {//remove the weakest players and add this one
+        }*/
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle("Well done ! " + mFirstname)

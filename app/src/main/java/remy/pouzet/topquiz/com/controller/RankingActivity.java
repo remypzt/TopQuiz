@@ -17,7 +17,7 @@ import remy.pouzet.topquiz.com.model.Players;
 public class RankingActivity extends AppCompatActivity
 {
 
-    private SharedPreferences mPreferences2;
+    private SharedPreferences mPreferences;
     private TextView mTextView1;
     private TextView mTextView2;
     private TextView mTextView3;
@@ -29,7 +29,7 @@ public class RankingActivity extends AppCompatActivity
     private String players;
 
 
-    public static final String PREF_PLAYERS_LIST2 = "PREF_PLAYERS_LIST2";
+    public static final String PREF_PLAYERS_LIST = "PREF_PLAYERS_LIST";
 
     public TextView getTextView1()
     {
@@ -118,18 +118,17 @@ public class RankingActivity extends AppCompatActivity
         mButton1 = findViewById(R.id.button);
         mButton2 = findViewById(R.id.button2);
 
-        mPreferences2 = getSharedPreferences(PREF_PLAYERS_LIST2, MODE_PRIVATE);
+        mPreferences = getSharedPreferences(PREF_PLAYERS_LIST, MODE_PRIVATE);
 
-        String jsonPlayersList2 = mPreferences2.getString(PREF_PLAYERS_LIST2, null);
+        String jsonPlayersList2 = mPreferences.getString(PREF_PLAYERS_LIST, null);
         Gson gson4 = new Gson();
         ArrayList<Players> playersList2 = gson4.fromJson(jsonPlayersList2, new TypeToken<ArrayList<Players>>() {}.getType());
 
         mTextView1.setText(playersList2.get(0).getFirstName()+(" ")+(playersList2.get(0).getScore()));
         mTextView2.setText(playersList2.get(1).getFirstName()+(" ")+(playersList2.get(1).getScore()));
-
-        /*mTextView3.setText(playersList2.get(2).getFirstName()+(" ")+(playersList2.get(2).getScore()));
+        mTextView3.setText(playersList2.get(2).getFirstName()+(" ")+(playersList2.get(2).getScore()));
         mTextView4.setText(playersList2.get(3).getFirstName()+(" ")+(playersList2.get(3).getScore()));
-        mTextView5.setText(playersList2.get(4).getFirstName()+(" ")+(playersList2.get(4).getScore()));*/
+        mTextView5.setText(playersList2.get(4).getFirstName()+(" ")+(playersList2.get(4).getScore()));
 
         System.out.println("MainActivity::onStart()");
     }
