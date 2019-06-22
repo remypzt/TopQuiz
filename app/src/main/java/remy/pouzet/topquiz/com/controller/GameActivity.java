@@ -28,7 +28,8 @@ import remy.pouzet.topquiz.com.model.QuestionBank;
 
 
 
-public class GameActivity extends AppCompatActivity implements View.OnClickListener {
+public class GameActivity extends AppCompatActivity implements View.OnClickListener
+{
 
     private TextView mQuestionTextView;
     private Button mAnswerButton1;
@@ -49,11 +50,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public static final String BUNDLE_STATE_QUESTION = "currentQuestion";
 
     public static final String PREF_PLAYERS_LIST = "PREF_PLAYERS_LIST";
-    public static final String PREF_PLAYERS_LIST1 = "PREF_PLAYERS_LIST1";
+    public static final String PREF_PLAYERS_LIST2 = "PREF_PLAYERS_LIST2";
 
     private boolean mEnableTouchEvents;
 
     private SharedPreferences mPreferences;
+    private SharedPreferences mPreferences2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -67,6 +69,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         System.out.println("GameActivity::onCreate()");
 
         mPreferences = getSharedPreferences(PREF_PLAYERS_LIST, MODE_PRIVATE);
+        mPreferences2 = getSharedPreferences(PREF_PLAYERS_LIST2, MODE_PRIVATE);
 
         mQuestionBank = this.generateQuestions();
 
@@ -107,7 +110,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(Bundle outState)
+    {
         outState.putInt(BUNDLE_STATE_SCORE, mScore);
         outState.putInt(BUNDLE_STATE_QUESTION, mNumberOfQuestions);
 
@@ -115,31 +119,38 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(View v)
+    {
         int responseIndex = (int) v.getTag();
 
-        if (responseIndex == mCurrentQuestion.getAnswerIndex()) {
+        if (responseIndex == mCurrentQuestion.getAnswerIndex())
+        {
             // Good answer
             Toast.makeText(this, "Correct", Toast.LENGTH_SHORT).show();
             mScore++;
-        } else {
+        } else
+        {
             // Wrong answer
             Toast.makeText(this, "Wrong answer!", Toast.LENGTH_SHORT).show();
         }
 
         mEnableTouchEvents = false;
 
-        new Handler().postDelayed(new Runnable() {
+        new Handler().postDelayed(new Runnable()
+        {
             @Override
-            public void run() {
+            public void run()
+            {
                 mEnableTouchEvents = true;
 
                 // If this is the last question, ends the game.
                 // Else, display the next question.
-                if (--mNumberOfQuestions == 0) {
+                if (--mNumberOfQuestions == 0)
+                {
                     // End the game
                     endGame();
-                } else {
+                } else
+                {
                     mCurrentQuestion = mQuestionBank.getQuestion();
                     displayQuestion(mCurrentQuestion);
                 }
@@ -148,7 +159,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
+    public boolean dispatchTouchEvent(MotionEvent ev)
+    {
         return mEnableTouchEvents && super.dispatchTouchEvent(ev);
     }
 
@@ -156,33 +168,32 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     {
         Players players = new Players(mFirstname, mScore);
 
-        ArrayList<Players> playersList = new ArrayList();
-        playersList.add(players);
+        String fromJsonPlayersList = mPreferences.getString(PREF_PLAYERS_LIST, null);
 
-        Gson gson = new Gson();
-        String jsonPlayersList = gson.toJson(playersList);
+        if (null == fromJsonPlayersList)
+        {
+            ArrayList<Players> playersList = new ArrayList();
+            playersList.add(players);
 
-        SharedPreferences.Editor editor = mPreferences.edit();
-        editor.putString(PREF_PLAYERS_LIST, jsonPlayersList).apply();
+            Gson gson = new Gson();
+            String jsonPlayersList = gson.toJson(playersList);
 
-        /* // makes a test by registering a Playerslist in another ArrayList //
+            SharedPreferences.Editor editor = mPreferences.edit();
+            editor.putString(PREF_PLAYERS_LIST, jsonPlayersList).apply();
+        } else
+        {
+            Gson gson2 = new Gson();
+            ArrayList<Players> playersList2 = gson2.fromJson(fromJsonPlayersList, new TypeToken<ArrayList<Players>>()
+            {
+            }.getType());
+            playersList2.add(players);
 
+            Gson gson3 = new Gson();
+            String PlayersList2 = gson3.toJson(playersList2);
 
-        String jsonPlayersList1 = mPreferences.getString(PREF_PLAYERS_LIST, null);
-
-        Gson gson1 = new Gson();
-        ArrayList<Players> playersList1 = gson1.fromJson(jsonPlayersList1, new TypeToken<ArrayList<Players>>() {}.getType());
-
-        ArrayList<Players> playersList11 = new ArrayList();
-        playersList11.add(playersList1.get(0));
-
-        Gson gson2 = new Gson();
-        String jsonPlayersList11 = gson2.toJson(playersList11);
-
-        SharedPreferences.Editor editor1 = mPreferences.edit();
-        editor1.putString(PREF_PLAYERS_LIST1, jsonPlayersList11).apply();
-*/
-
+            SharedPreferences.Editor editor = mPreferences2.edit();
+            editor.putString(PREF_PLAYERS_LIST2, PlayersList2).apply();
+        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 

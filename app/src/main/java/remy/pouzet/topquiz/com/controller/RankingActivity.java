@@ -10,16 +10,14 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-
 
 import remy.pouzet.topquiz.com.R;
 import remy.pouzet.topquiz.com.model.Players;
 
 public class RankingActivity extends AppCompatActivity
 {
-    private SharedPreferences mPreferences;
 
+    private SharedPreferences mPreferences2;
     private TextView mTextView1;
     private TextView mTextView2;
     private TextView mTextView3;
@@ -30,8 +28,8 @@ public class RankingActivity extends AppCompatActivity
 
     private String players;
 
-    public static final String PREF_PLAYERS_LIST = "PREF_PLAYERS_LIST";
-    public static final String PREF_PLAYERS_LIST1 = "PREF_PLAYERS_LIST1";
+
+    public static final String PREF_PLAYERS_LIST2 = "PREF_PLAYERS_LIST2";
 
     public TextView getTextView1()
     {
@@ -120,29 +118,18 @@ public class RankingActivity extends AppCompatActivity
         mButton1 = findViewById(R.id.button);
         mButton2 = findViewById(R.id.button2);
 
-        mPreferences = getSharedPreferences(PREF_PLAYERS_LIST, MODE_PRIVATE);
+        mPreferences2 = getSharedPreferences(PREF_PLAYERS_LIST2, MODE_PRIVATE);
 
-        String jsonPlayersList = mPreferences.getString(PREF_PLAYERS_LIST, null);
-        Gson gson = new Gson();
-        ArrayList<Players> playersList = gson.fromJson(jsonPlayersList, new TypeToken<ArrayList<Players>>() {}.getType());
+        String jsonPlayersList2 = mPreferences2.getString(PREF_PLAYERS_LIST2, null);
+        Gson gson4 = new Gson();
+        ArrayList<Players> playersList2 = gson4.fromJson(jsonPlayersList2, new TypeToken<ArrayList<Players>>() {}.getType());
 
-/* // makes a test by registering a Playerslist in another ArrayList //
+        mTextView1.setText(playersList2.get(0).getFirstName()+(" ")+(playersList2.get(0).getScore()));
+        mTextView2.setText(playersList2.get(1).getFirstName()+(" ")+(playersList2.get(1).getScore()));
 
-        String jsonPlayersList111 = mPreferences.getString(PREF_PLAYERS_LIST1, null);
-        Gson gson = new Gson();
-        ArrayList<Players> playersList111 = gson.fromJson(jsonPlayersList111, new TypeToken<ArrayList<Players>>() {}.getType());
-        */
-
-        mTextView1.setText(playersList.get(0).getFirstName()+(" ")+(playersList.get(0).getScore()));
-
-        /*mTextView2.setText(playersList111.get(0).getFirstName()+(" ")+(playersList111.get(0).getScore()));
-
-      /*
-        mTextView3.setText(playersList.get(2).getFirstName()+(" ")+(playersList.get(2).getScore()));
-        mTextView4.setText(playersList.get(3).getFirstName()+(" ")+(playersList.get(3).getScore()));
-        mTextView5.setText(playersList.get(4).getFirstName()+(" ")+(playersList.get(4).getScore()));*/
-
-
+        /*mTextView3.setText(playersList2.get(2).getFirstName()+(" ")+(playersList2.get(2).getScore()));
+        mTextView4.setText(playersList2.get(3).getFirstName()+(" ")+(playersList2.get(3).getScore()));
+        mTextView5.setText(playersList2.get(4).getFirstName()+(" ")+(playersList2.get(4).getScore()));*/
 
         System.out.println("MainActivity::onStart()");
     }
