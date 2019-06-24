@@ -15,8 +15,8 @@ import android.widget.TextView;
 import remy.pouzet.topquiz.com.R;
 import remy.pouzet.topquiz.com.model.User;
 
-
 public class MainActivity extends AppCompatActivity {
+
 
     private TextView mGreetingText;
     private EditText mNameInput;
@@ -35,10 +35,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         System.out.println("MainActivity::onCreate()");
+
 
         mUser = new User();
 
@@ -72,8 +74,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-
 
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override

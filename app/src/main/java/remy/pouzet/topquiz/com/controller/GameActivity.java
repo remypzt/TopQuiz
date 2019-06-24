@@ -19,7 +19,10 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
+
 
 
 import remy.pouzet.topquiz.com.R;
@@ -56,11 +59,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private boolean mEnableTouchEvents;
 
     private SharedPreferences mPreferences;
-    private SharedPreferences mPreferences2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+
+
         Intent intent = getIntent();
         mFirstname = intent.getStringExtra(MainActivity.FIRSTNAME_REQUEST_CODE);
 
@@ -70,7 +74,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         System.out.println("GameActivity::onCreate()");
 
         mPreferences = getSharedPreferences(PREF_PLAYERS_LIST, MODE_PRIVATE);
-        mPreferences2 = getSharedPreferences(PREF_PLAYERS_LIST2, MODE_PRIVATE);
 
         mQuestionBank = this.generateQuestions();
 
@@ -159,15 +162,25 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }, 2000); // LENGTH_SHORT is usually 2 second long
     }
 
-
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev)
     {
         return mEnableTouchEvents && super.dispatchTouchEvent(ev);
     }
 
+    public static String getPrefPlayersList()
+    {
+        return PREF_PLAYERS_LIST;
+    }
+
+    public static String getPrefPlayersList2()
+    {
+        return PREF_PLAYERS_LIST2;
+    }
+
     private void endGame()
     {
+
         Players players = new Players(mFirstname, mScore);
 
         mPreferences = getSharedPreferences(PREF_PLAYERS_LIST, MODE_PRIVATE);
@@ -178,7 +191,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         {
         }.getType());
 
-
+/*        Players minScorePlayer = playersList2.get(0);
+        for (Players player: playersList2) {
+            if (player.getScore() < minScorePlayer.getScore()) {
+                minScorePlayer = player;
+            }
+        }
+        System.out.println(minScorePlayer);*/
 
         if (null == fromJsonPlayersList)
         {
@@ -191,7 +210,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             SharedPreferences.Editor editor = mPreferences.edit();
             editor.putString(PREF_PLAYERS_LIST, jsonPlayersList).apply();
 
-        } else if (playersList2.size() <= 5)
+        } else if (playersList2.size() != 5)
         {
             playersList2.add(players);
 
@@ -200,9 +219,21 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
             SharedPreferences.Editor editor = mPreferences.edit();
             editor.putString(PREF_PLAYERS_LIST, PlayersList).apply();
-        }/* else  if  //mscore is bigger than weakest players
-        {//remove the weakest players and add this one
-        }*/
+/*
+        } else  if (mScore >= minScorePlayer.getScore())
+        {
+            playersList2.remove(minScorePlayer);
+
+            playersList2.add(players);
+
+            Gson gson2 = new Gson();
+            String PlayersList = gson2.toJson(playersList2);
+
+            SharedPreferences.Editor editor = mPreferences.edit();
+            editor.putString(PREF_PLAYERS_LIST, PlayersList).apply();*/
+        }
+
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle("Well done ! " + mFirstname)

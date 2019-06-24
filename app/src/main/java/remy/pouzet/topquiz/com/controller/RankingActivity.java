@@ -26,80 +26,10 @@ public class RankingActivity extends AppCompatActivity
     private Button mButton1;
     private Button mButton2;
 
-    private String players;
+
 
 
     public static final String PREF_PLAYERS_LIST = "PREF_PLAYERS_LIST";
-
-    public TextView getTextView1()
-    {
-        return mTextView1;
-    }
-
-    public void setTextView1(TextView textView1)
-    {
-        mTextView1 = textView1;
-    }
-
-    public TextView getTextView2()
-    {
-        return mTextView2;
-    }
-
-    public void setTextView2(TextView textView2)
-    {
-        mTextView2 = textView2;
-    }
-
-    public TextView getTextView3()
-    {
-        return mTextView3;
-    }
-
-    public void setTextView3(TextView textView3)
-    {
-        mTextView3 = textView3;
-    }
-
-    public TextView getTextView4()
-    {
-        return mTextView4;
-    }
-
-    public void setTextView4(TextView textView4)
-    {
-        mTextView4 = textView4;
-    }
-
-    public TextView getTextView5()
-    {
-        return mTextView5;
-    }
-
-    public void setTextView5(TextView textView5)
-    {
-        mTextView5 = textView5;
-    }
-
-    public Button getButton1()
-    {
-        return mButton1;
-    }
-
-    public void setButton1(Button button1)
-    {
-        mButton1 = button1;
-    }
-
-    public Button getButton2()
-    {
-        return mButton2;
-    }
-
-    public void setButton2(Button button2)
-    {
-        mButton2 = button2;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -122,17 +52,114 @@ public class RankingActivity extends AppCompatActivity
 
         String jsonPlayersList2 = mPreferences.getString(PREF_PLAYERS_LIST, null);
         Gson gson4 = new Gson();
-        ArrayList<Players> playersList2 = gson4.fromJson(jsonPlayersList2, new TypeToken<ArrayList<Players>>() {}.getType());
+        ArrayList<Players> playersList2 = gson4.fromJson(jsonPlayersList2, new TypeToken<ArrayList<Players>>()
+        {
+        }.getType());
 
-        mTextView1.setText(playersList2.get(0).getFirstName()+(" ")+(playersList2.get(0).getScore()));
-        mTextView2.setText(playersList2.get(1).getFirstName()+(" ")+(playersList2.get(1).getScore()));
-        mTextView3.setText(playersList2.get(2).getFirstName()+(" ")+(playersList2.get(2).getScore()));
-        mTextView4.setText(playersList2.get(3).getFirstName()+(" ")+(playersList2.get(3).getScore()));
-        mTextView5.setText(playersList2.get(4).getFirstName()+(" ")+(playersList2.get(4).getScore()));
-
-        System.out.println("MainActivity::onStart()");
+        if (playersList2 == null)
+        {
+            mTextView1.setText("");
+            mTextView2.setText("");
+            mTextView3.setText("");
+            mTextView4.setText("");
+            mTextView5.setText("");
+        } else if (playersList2.size() == 0)
+        {
+            mTextView1.setText(playersList2.get(0).getFirstName() + (" ") + (playersList2.get(0).getScore()));
+            mTextView2.setText("");
+            mTextView3.setText("");
+            mTextView4.setText("");
+            mTextView5.setText("");
+        } else if (playersList2.size() == 1)
+            mTextView1.setText(playersList2.get(0).getFirstName() + (" ") + (playersList2.get(0).getScore()));
+        mTextView2.setText(playersList2.get(1).getFirstName() + (" ") + (playersList2.get(1).getScore()));
+        mTextView3.setText("");
+        mTextView4.setText("");
+        mTextView5.setText("");
     }
-}
+        /*
+        else if (playersList2.size() == 2)
+    {
+        mTextView1.setText(playersList2.get(0).getFirstName() + (" ") + (playersList2.get(0).getScore()));
+        mTextView2.setText(playersList2.get(1).getFirstName() + (" ") + (playersList2.get(1).getScore()));
+        mTextView3.setText(playersList2.get(2).getFirstName() + (" ") + (playersList2.get(2).getScore()));
+        mTextView4.setText("");
+        mTextView5.setText("");
+    }
+else if (playersList2.size() == 3)
+    {
+        mTextView1.setText(playersList2.get(0).getFirstName() + (" ") + (playersList2.get(0).getScore()));
+        mTextView2.setText(playersList2.get(1).getFirstName() + (" ") + (playersList2.get(1).getScore()));
+        mTextView3.setText(playersList2.get(2).getFirstName() + (" ") + (playersList2.get(2).getScore()));
+        mTextView4.setText(playersList2.get(3).getFirstName() + (" ") + (playersList2.get(3).getScore()));
+        mTextView5.setText("");
+    }
+else if (playersList2.size() >= 4)
+    {
+        mTextView1.setText(playersList2.get(0).getFirstName() + (" ") + (playersList2.get(0).getScore()));
+        mTextView2.setText(playersList2.get(1).getFirstName() + (" ") + (playersList2.get(1).getScore()));
+        mTextView3.setText(playersList2.get(2).getFirstName() + (" ") + (playersList2.get(2).getScore()));
+        mTextView4.setText(playersList2.get(3).getFirstName() + (" ") + (playersList2.get(3).getScore()));
+        mTextView5.setText(playersList2.get(4).getFirstName() + (" ") + (playersList2.get(4).getScore()));
+    }
+
+/*
+       switch (playersList2.size())
+        {
+
+            case 0:
+                mTextView1.setText(playersList2.get(0).getFirstName() + (" ") + (playersList2.get(0).getScore()));
+                mTextView2.setText("");
+                mTextView3.setText("");
+                mTextView4.setText("");
+                mTextView5.setText("");
+                break;
+
+            case 1:
+                mTextView1.setText(playersList2.get(0).getFirstName() + (" ") + (playersList2.get(0).getScore()));
+                mTextView2.setText(playersList2.get(1).getFirstName() + (" ") + (playersList2.get(1).getScore()));
+                mTextView3.setText("");
+                mTextView4.setText("");
+                mTextView5.setText("");
+                break;
+
+            case 2:
+                mTextView1.setText(playersList2.get(0).getFirstName() + (" ") + (playersList2.get(0).getScore()));
+                mTextView2.setText(playersList2.get(1).getFirstName() + (" ") + (playersList2.get(1).getScore()));
+                mTextView3.setText(playersList2.get(2).getFirstName() + (" ") + (playersList2.get(2).getScore()));
+                mTextView4.setText("");
+                mTextView5.setText("");
+                break;
+
+            case 3:
+                mTextView1.setText(playersList2.get(0).getFirstName() + (" ") + (playersList2.get(0).getScore()));
+                mTextView2.setText(playersList2.get(1).getFirstName() + (" ") + (playersList2.get(1).getScore()));
+                mTextView3.setText(playersList2.get(2).getFirstName() + (" ") + (playersList2.get(2).getScore()));
+                mTextView4.setText(playersList2.get(3).getFirstName() + (" ") + (playersList2.get(3).getScore()));
+                mTextView5.setText("");
+                break;
+
+            case 4:
+                mTextView1.setText(playersList2.get(0).getFirstName() + (" ") + (playersList2.get(0).getScore()));
+                mTextView2.setText(playersList2.get(1).getFirstName() + (" ") + (playersList2.get(1).getScore()));
+                mTextView3.setText(playersList2.get(2).getFirstName() + (" ") + (playersList2.get(2).getScore()));
+                mTextView4.setText(playersList2.get(3).getFirstName() + (" ") + (playersList2.get(3).getScore()));
+                mTextView5.setText(playersList2.get(4).getFirstName() + (" ") + (playersList2.get(4).getScore()));
+                break;
+
+            default:
+                mTextView1.setText("");
+                mTextView2.setText("");
+                mTextView3.setText("");
+                mTextView4.setText("");
+                mTextView5.setText("");
+                break;
+        }
+
+
+            System.out.println("MainActivity::onStart()");*/
+    }
+
 
 
 
