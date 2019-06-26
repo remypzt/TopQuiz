@@ -29,8 +29,6 @@ public class MainActivity extends AppCompatActivity {
     public static final String PREF_KEY_SCORE = "PREF_KEY_SCORE";
     public static final String PREF_KEY_FIRSTNAME = "PREF_KEY_FIRSTNAME";
 
-    private String mFirstname;
-
     public static final String FIRSTNAME_REQUEST_CODE = "remy/pouzet/topquiz/com/controller/GameActivity.java" ;
 
     @Override

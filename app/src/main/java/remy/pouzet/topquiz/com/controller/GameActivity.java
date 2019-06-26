@@ -19,17 +19,12 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-
 
 
 import remy.pouzet.topquiz.com.R;
 import remy.pouzet.topquiz.com.model.Players;
 import remy.pouzet.topquiz.com.model.Question;
 import remy.pouzet.topquiz.com.model.QuestionBank;
-
 
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener
@@ -54,7 +49,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public static final String BUNDLE_STATE_QUESTION = "currentQuestion";
 
     public static final String PREF_PLAYERS_LIST = "PREF_PLAYERS_LIST";
-    public static final String PREF_PLAYERS_LIST2 = "PREF_PLAYERS_LIST2";
 
     private boolean mEnableTouchEvents;
 
@@ -85,7 +79,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         } else
         {
             mScore = 0;
-            mNumberOfQuestions = 2;
+            mNumberOfQuestions = 3;
         }
 
         mEnableTouchEvents = true;
@@ -168,16 +162,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         return mEnableTouchEvents && super.dispatchTouchEvent(ev);
     }
 
-    public static String getPrefPlayersList()
-    {
-        return PREF_PLAYERS_LIST;
-    }
-
-    public static String getPrefPlayersList2()
-    {
-        return PREF_PLAYERS_LIST2;
-    }
-
     private void endGame()
     {
 
@@ -191,13 +175,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         {
         }.getType());
 
-/*        Players minScorePlayer = playersList2.get(0);
-        for (Players player: playersList2) {
-            if (player.getScore() < minScorePlayer.getScore()) {
-                minScorePlayer = player;
-            }
-        }
-        System.out.println(minScorePlayer);*/
 
         if (null == fromJsonPlayersList)
         {
@@ -219,18 +196,31 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
             SharedPreferences.Editor editor = mPreferences.edit();
             editor.putString(PREF_PLAYERS_LIST, PlayersList).apply();
-/*
-        } else  if (mScore >= minScorePlayer.getScore())
+
+        } else
         {
-            playersList2.remove(minScorePlayer);
+            Players minScorePlayer = playersList2.get(0);
+            for (Players player : playersList2)
+            {
+                if (player.getScore() < minScorePlayer.getScore())
+                {
+                    minScorePlayer = player;
+                }
+            }
+            System.out.println(minScorePlayer);
 
-            playersList2.add(players);
+            if (mScore >= minScorePlayer.getScore())
+            {
+                playersList2.remove(minScorePlayer);
 
-            Gson gson2 = new Gson();
-            String PlayersList = gson2.toJson(playersList2);
+                playersList2.add(players);
 
-            SharedPreferences.Editor editor = mPreferences.edit();
-            editor.putString(PREF_PLAYERS_LIST, PlayersList).apply();*/
+                Gson gson2 = new Gson();
+                String PlayersList = gson2.toJson(playersList2);
+
+                SharedPreferences.Editor editor = mPreferences.edit();
+                editor.putString(PREF_PLAYERS_LIST, PlayersList).apply();
+            }
         }
 
 
@@ -256,7 +246,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 .show();
     }
 
-    private void displayQuestion(final Question question) {
+    private void displayQuestion(final Question question)
+    {
         mQuestionTextView.setText(question.getQuestion());
         mAnswerButton1.setText(question.getChoiceList().get(0));
         mAnswerButton2.setText(question.getChoiceList().get(1));
@@ -264,7 +255,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         mAnswerButton4.setText(question.getChoiceList().get(3));
     }
 
-    private QuestionBank generateQuestions() {
+    private QuestionBank generateQuestions()
+    {
         Question question1 = new Question("What is the name of the current french president?",
                 Arrays.asList("François Hollande", "Emmanuel Macron", "Jacques Chirac", "François Mitterand"),
                 1);
@@ -313,35 +305,40 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    protected void onStart() {
+    protected void onStart()
+    {
         super.onStart();
 
         System.out.println("GameActivity::onStart()");
     }
 
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
         super.onResume();
 
         System.out.println("GameActivity::onResume()");
     }
 
     @Override
-    protected void onPause() {
+    protected void onPause()
+    {
         super.onPause();
 
         System.out.println("GameActivity::onPause()");
     }
 
     @Override
-    protected void onStop() {
+    protected void onStop()
+    {
         super.onStop();
 
         System.out.println("GameActivity::onStop()");
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onDestroy()
+    {
         super.onDestroy();
 
         System.out.println("GameActivity::onDestroy()");
