@@ -64,16 +64,16 @@ public class RankingActivity extends AppCompatActivity
             {
                 Collections.sort(playersList2);
                 Collections.reverse(playersList2);
-                if (playersList2.size() > 1)
+                if (playersList2.size() >= 1)
                 {
                     mTextView1.setText(playersList2.get(0).getFirstName() + (" ") + (playersList2.get(0).getScore()));
-                    if (playersList2.size() > 2)
+                    if (playersList2.size() >= 2)
                     {
                         mTextView2.setText(playersList2.get(1).getFirstName() + (" ") + (playersList2.get(1).getScore()));
-                        if (playersList2.size() > 3)
+                        if (playersList2.size() >= 3)
                         {
                             mTextView3.setText(playersList2.get(2).getFirstName() + (" ") + (playersList2.get(2).getScore()));
-                            if (playersList2.size() > 4)
+                            if (playersList2.size() >= 4)
                             {
                                 mTextView4.setText(playersList2.get(3).getFirstName() + (" ") + (playersList2.get(3).getScore()));
                                 if (playersList2.size() >= 5)
@@ -93,16 +93,16 @@ public class RankingActivity extends AppCompatActivity
             public void onClick(View v)
             {
                 Collections.sort(playersList2, Players.ComparatorFirstname);
-                if (playersList2.size() > 1)
+                if (playersList2.size() >= 1)
                 {
                     mTextView1.setText(playersList2.get(0).getFirstName() + (" ") + (playersList2.get(0).getScore()));
-                    if (playersList2.size() > 2)
+                    if (playersList2.size() >= 2)
                     {
                         mTextView2.setText(playersList2.get(1).getFirstName() + (" ") + (playersList2.get(1).getScore()));
-                        if (playersList2.size() > 3)
+                        if (playersList2.size() >= 3)
                         {
                             mTextView3.setText(playersList2.get(2).getFirstName() + (" ") + (playersList2.get(2).getScore()));
-                            if (playersList2.size() > 4)
+                            if (playersList2.size() >= 4)
                             {
                                 mTextView4.setText(playersList2.get(3).getFirstName() + (" ") + (playersList2.get(3).getScore()));
                                 if (playersList2.size() >= 5)
